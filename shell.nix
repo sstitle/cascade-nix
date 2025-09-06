@@ -21,6 +21,12 @@ in pkgs.mkShell {
     llvmPackages.lld
     llvmPackages.libcxx
     catch2Pkg
+    git
+    nickel
+    mask
+    cmake
+    ninja
+    gcc
   ];
 
   # -----------------------------

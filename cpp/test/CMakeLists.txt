@@ -16,5 +16,16 @@ else()
 endif()
 target_include_directories(test_usecase PRIVATE ${CMAKE_SOURCE_DIR})
 
+add_executable(test_spdlog_adapter adapters/SpdlogAdapter.test.cpp)
+if(Catch2_VERSION VERSION_LESS 3)
+  target_link_libraries(test_spdlog_adapter PRIVATE adapter_spdlog
+                                                    Catch2::Catch2)
+else()
+  target_link_libraries(test_spdlog_adapter PRIVATE adapter_spdlog
+                                                    Catch2::Catch2WithMain)
+endif()
+target_include_directories(test_spdlog_adapter PRIVATE ${CMAKE_SOURCE_DIR})
+
 include(Catch)
 catch_discover_tests(test_usecase)
+catch_discover_tests(test_spdlog_adapter)

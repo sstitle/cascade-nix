@@ -17,6 +17,16 @@ target_sources(
 target_include_directories(adapter_fake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(adapter_fake PUBLIC cad_core)
 
+# Find spdlog package
+find_package(spdlog REQUIRED)
+
+add_library(adapter_spdlog)
+target_sources(
+  adapter_spdlog
+  PRIVATE adapters/spdlog/SpdlogAdapter.cpp)
+target_include_directories(adapter_spdlog PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+target_link_libraries(adapter_spdlog PUBLIC cad_core spdlog::spdlog)
+
 add_executable(cad_cli app/cli/main.cpp app/cli/Formatter.cpp)
 target_include_directories(cad_cli PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
-target_link_libraries(cad_cli PRIVATE cad_usecases adapter_fake)
+target_link_libraries(cad_cli PRIVATE cad_usecases adapter_fake adapter_spdlog)

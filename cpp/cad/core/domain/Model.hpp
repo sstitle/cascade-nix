@@ -8,6 +8,4 @@ struct Model {
   Assembly root;
 };
 
-}
-
-
+} // namespace cad::domain

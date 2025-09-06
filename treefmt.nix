@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   projectRootFile = "flake.nix";
   programs = {
     # keep-sorted start
+    clang-format.enable = true;
     cmake-format.enable = true;
     keep-sorted.enable = true;
     nixfmt.enable = true;
@@ -28,5 +29,12 @@
         ]
       );
     };
+
+  };
+  settings.formatter = {
+    cmake-format.includes = lib.mkAfter [
+      "*.cmake"
+      "*/CMakeLists.txt"
+    ];
   };
 }

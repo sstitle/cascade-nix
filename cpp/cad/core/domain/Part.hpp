@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include "Identifiers.hpp"
+#include <string>
 
 namespace cad::domain {
 
@@ -10,6 +10,4 @@ struct Part {
   std::string name;
 };
 
-}
-
-
+} // namespace cad::domain

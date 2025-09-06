@@ -1,7 +1,7 @@
 #pragma once
 
-#include <istream>
 #include "../domain/Model.hpp"
+#include <istream>
 
 namespace cad::ports {
 
@@ -10,6 +10,4 @@ struct CadModelReaderPort {
   virtual cad::domain::Model readModelFromStream(std::istream &stream) = 0;
 };
 
-}
-
-
+} // namespace cad::ports

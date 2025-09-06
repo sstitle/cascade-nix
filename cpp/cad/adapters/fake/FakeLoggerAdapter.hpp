@@ -8,7 +8,7 @@
 namespace cad::adapters::fake {
 
 class FakeLoggerAdapter : public cad::ports::LoggerPort {
- public:
+public:
   void log(cad::ports::LogLevel level, const std::string &message) override {
     entries.push_back(message);
   }
@@ -16,6 +16,4 @@ class FakeLoggerAdapter : public cad::ports::LoggerPort {
   std::vector<std::string> entries;
 };
 
-}
-
-
+} // namespace cad::adapters::fake

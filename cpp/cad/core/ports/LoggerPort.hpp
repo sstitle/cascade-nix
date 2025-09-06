@@ -11,6 +11,4 @@ struct LoggerPort {
   virtual void log(LogLevel level, const std::string &message) = 0;
 };
 
-}
-
-
+} // namespace cad::ports

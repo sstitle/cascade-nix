@@ -12,6 +12,4 @@ struct AssemblyId {
   std::string value;
 };
 
-}
-
-
+} // namespace cad::domain

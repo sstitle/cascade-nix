@@ -13,7 +13,8 @@ namespace cad::adapters::fake {
 static std::string trim(const std::string &s) {
   size_t start = s.find_first_not_of(" \t\r\n");
   size_t end = s.find_last_not_of(" \t\r\n");
-  if (start == std::string::npos) return "";
+  if (start == std::string::npos)
+    return "";
   return s.substr(start, end - start + 1);
 }
 
@@ -54,6 +55,4 @@ Model FakeCadModelReaderAdapter::readModelFromStream(std::istream &stream) {
   return model;
 }
 
-}
-
-
+} // namespace cad::adapters::fake

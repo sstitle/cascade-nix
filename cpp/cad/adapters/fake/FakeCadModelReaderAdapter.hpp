@@ -16,10 +16,8 @@ namespace cad::adapters::fake {
 //   EndAssembly
 // Nested assemblies are delimited by Assembly/EndAssembly.
 class FakeCadModelReaderAdapter : public cad::ports::CadModelReaderPort {
- public:
+public:
   cad::domain::Model readModelFromStream(std::istream &stream) override;
 };
 
-}
-
-
+} // namespace cad::adapters::fake

@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-#include "../../core/usecase/ListModelPartsUseCase.hpp"
 #include "../../adapters/fake/FakeCadModelReaderAdapter.hpp"
-#include "../../adapters/fake/FakeModelDataSourceAdapter.hpp"
 #include "../../adapters/fake/FakeLoggerAdapter.hpp"
+#include "../../adapters/fake/FakeModelDataSourceAdapter.hpp"
+#include "../../core/usecase/ListModelPartsUseCase.hpp"
 #include "Formatter.hpp"
 
 int main(int argc, char **argv) {
@@ -30,7 +30,9 @@ int main(int argc, char **argv) {
   // For demo: if the locator starts with "mem:", register inline content
   if (locator.rfind("mem:", 0) == 0) {
     // Simple demo content
-    std::string content = "Assembly: Engine\nPart: Piston\nPart: Valve\nEndAssembly\nAssembly: Frame\nPart: Bolt\nEndAssembly\n";
+    std::string content =
+        "Assembly: Engine\nPart: Piston\nPart: Valve\nEndAssembly\nAssembly: "
+        "Frame\nPart: Bolt\nEndAssembly\n";
     source.registerContent(locator, content);
   }
 
@@ -40,5 +42,3 @@ int main(int argc, char **argv) {
   std::cout << cad::app::cli::Formatter::joinLines(lines) << std::endl;
   return 0;
 }
-
-

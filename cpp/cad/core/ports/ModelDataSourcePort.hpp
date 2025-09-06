@@ -11,6 +11,4 @@ struct ModelDataSourcePort {
   virtual std::unique_ptr<std::istream> open(const std::string &locator) = 0;
 };
 
-}
-
-
+} // namespace cad::ports

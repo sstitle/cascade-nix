@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include "Identifiers.hpp"
 #include "Part.hpp"
+#include <string>
+#include <vector>
 
 namespace cad::domain {
 
@@ -14,6 +14,4 @@ struct Assembly {
   std::vector<Part> parts;
 };
 
-}
-
-
+} // namespace cad::domain

@@ -11,8 +11,9 @@
 namespace cad::adapters::fake {
 
 class FakeModelDataSourceAdapter : public cad::ports::ModelDataSourcePort {
- public:
-  // Registers a virtual locator with content string (simulates a file or remote resource)
+public:
+  // Registers a virtual locator with content string (simulates a file or remote
+  // resource)
   void registerContent(const std::string &locator, const std::string &content) {
     store_[locator] = content;
   }
@@ -25,10 +26,8 @@ class FakeModelDataSourceAdapter : public cad::ports::ModelDataSourcePort {
     return std::make_unique<std::istringstream>(it->second);
   }
 
- private:
+private:
   std::map<std::string, std::string> store_;
 };
 
-}
-
-
+} // namespace cad::adapters::fake

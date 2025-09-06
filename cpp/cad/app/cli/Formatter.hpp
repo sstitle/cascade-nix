@@ -10,12 +10,11 @@ struct Formatter {
     std::string out;
     for (size_t i = 0; i < lines.size(); ++i) {
       out += lines[i];
-      if (i + 1 < lines.size()) out += "\n";
+      if (i + 1 < lines.size())
+        out += "\n";
     }
     return out;
   }
 };
 
-}
-
-
+} // namespace cad::app::cli

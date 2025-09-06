@@ -81,7 +81,7 @@ echo "6️⃣  Error handling (missing file):"
 echo ""
 
 echo "7️⃣  OpenCASCADE STEP file (with spdlog):"
-./build/cpp/cad/cad_cli --logger=spdlog --data-source=opencascade list test-data/LEGOMAN.step
+./build/cpp/cad/cad_cli --logger=spdlog --data-source=opencascade list test-data/ExampleBallValve.step
 echo ""
 
 echo "🎉 All examples completed successfully!"

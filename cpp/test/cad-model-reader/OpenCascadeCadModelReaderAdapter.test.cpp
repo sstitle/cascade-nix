@@ -34,9 +34,9 @@ TEST_CASE("OpenCascadeCadModelReaderAdapter processes valid STEP file", "[openca
   // Try multiple possible paths for the STEP file
   std::ifstream stepFile;
   std::vector<std::string> possiblePaths = {
-    "../test-data/LEGOMAN.step",
-    "test-data/LEGOMAN.step",
-    "../../test-data/LEGOMAN.step"
+    "../test-data/ExampleBallValve.step",
+    "test-data/ExampleBallValve.step",
+    "../../test-data/ExampleBallValve.step"
   };
   
   bool fileFound = false;
@@ -57,9 +57,20 @@ TEST_CASE("OpenCascadeCadModelReaderAdapter processes valid STEP file", "[openca
   
   Model model = adapter.readModelFromStream(stepFile);
   
-  // The STEP file might have parsing issues, so accept either success or error
-  REQUIRE((model.root.name == "STEP Model (Loaded Successfully)" || 
-           model.root.name == "Error reading STEP file"));
+  // With the enhanced adapter, we should get real part names and counts
+  REQUIRE(model.root.name.find("STEP Model") == 0);
+  REQUIRE(!model.root.parts.empty());
+  
+  // Check that we got actual part names, not generic ones
+  bool hasRealNames = false;
+  for (const auto& part : model.root.parts) {
+    if (part.name != "Shape_1" && part.name != "STEP_Content" && 
+        part.name.find("Entity_") != 0) {
+      hasRealNames = true;
+      break;
+    }
+  }
+  REQUIRE(hasRealNames);
 }
 
 TEST_CASE("OpenCascadeCadModelReaderAdapter handles stream exceptions", "[opencascade]") {
@@ -71,8 +82,8 @@ TEST_CASE("OpenCascadeCadModelReaderAdapter handles stream exceptions", "[openca
   
   Model model = adapter.readModelFromStream(stream);
   
-  // The adapter should still handle this gracefully, even if not as an exception
-  REQUIRE((model.root.name == "Exception reading STEP file" || 
+  // The adapter should handle this gracefully with meaningful error messages
+  REQUIRE((model.root.name.find("Exception reading STEP file") == 0 || 
            model.root.name == "Error reading STEP file" ||
            model.root.name == "Empty STEP file"));
 }

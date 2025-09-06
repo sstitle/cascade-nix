@@ -1,0 +1,10 @@
+---
+description: General guidelines for project development.
+globs:
+alwaysApply: true
+---
+
+- This project is distinctly a "ports and adapters" or "hexagonal" architecture project. We want to preserve the modularity, extensability, and testability of code to an extreme degree. Keep the domain pure.
+- Use test-driven development whenever possible, meaning write a failing unit test before making changes and iterate until the test succeeds.
+- Before reporting back to the user with progress updates, verify your changes as best you can before asserting that the changes work. Making sure that files are free of linting errors or warnings, building the code, running the unit tests, running the integration tests, or completely testing things end-to-end all are good ideas.
+- This repo is organized by a Nix flake 'flake.nix' and a Mask 'maskfile.md'. Instead of expecting the user to remember a lot of commands, we should leverage the most common behaviors, configurations, and tasks as targets in the maskfile or direct outputs of the Nix flake whenever possible.

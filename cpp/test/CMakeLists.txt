@@ -46,8 +46,19 @@ else()
 endif()
 target_include_directories(test_json_cad_model_reader PRIVATE ${CMAKE_SOURCE_DIR})
 
+add_executable(test_opencascade_cad_model_reader cad-model-reader/OpenCascadeCadModelReaderAdapter.test.cpp)
+if(Catch2_VERSION VERSION_LESS 3)
+  target_link_libraries(test_opencascade_cad_model_reader PRIVATE adapter_opencascade
+                                                                  Catch2::Catch2)
+else()
+  target_link_libraries(test_opencascade_cad_model_reader PRIVATE adapter_opencascade
+                                                                  Catch2::Catch2WithMain)
+endif()
+target_include_directories(test_opencascade_cad_model_reader PRIVATE ${CMAKE_SOURCE_DIR})
+
 include(Catch)
 catch_discover_tests(test_usecase)
 catch_discover_tests(test_spdlog_adapter)
 catch_discover_tests(test_json_model_data_source)
 catch_discover_tests(test_json_cad_model_reader)
+catch_discover_tests(test_opencascade_cad_model_reader)

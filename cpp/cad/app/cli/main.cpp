@@ -4,16 +4,18 @@
 
 #include "cpp/cad/adapters/cad-model-reader/fake/FakeCadModelReaderAdapter.hpp"
 #include "cpp/cad/adapters/cad-model-reader/json/JsonCadModelReaderAdapter.hpp"
+#include "cpp/cad/adapters/cad-model-reader/opencascade/OpenCascadeCadModelReaderAdapter.hpp"
 #include "cpp/cad/adapters/logger/fake/FakeLoggerAdapter.hpp"
 #include "cpp/cad/adapters/model-data-source/fake/FakeModelDataSourceAdapter.hpp"
 #include "cpp/cad/adapters/model-data-source/json/JsonModelDataSourceAdapter.hpp"
+#include "cpp/cad/adapters/model-data-source/file/FileModelDataSourceAdapter.hpp"
 #include "cpp/cad/adapters/logger/spdlog/SpdlogAdapter.hpp"
 #include "cpp/cad/core/usecase/ListModelPartsUseCase.hpp"
 #include "cpp/cad/app/cli/Formatter.hpp"
 
 int main(int argc, char **argv) {
   if (argc < 3) {
-    std::cerr << "Usage: cad-cli [--logger=fake|spdlog] [--data-source=fake|json] list <locator>\n";
+    std::cerr << "Usage: cad-cli [--logger=fake|spdlog] [--data-source=fake|json|opencascade] list <locator>\n";
     return 1;
   }
 
@@ -34,7 +36,7 @@ int main(int argc, char **argv) {
   }
   
   if (argc <= argIndex + 1) {
-    std::cerr << "Usage: cad-cli [--logger=fake|spdlog] [--data-source=fake|json] list <locator>\n";
+    std::cerr << "Usage: cad-cli [--logger=fake|spdlog] [--data-source=fake|json|opencascade] list <locator>\n";
     return 1;
   }
 
@@ -55,6 +57,9 @@ int main(int argc, char **argv) {
   if (dataSourceType == "json") {
     source = std::make_unique<cad::adapters::json::JsonModelDataSourceAdapter>();
     reader = std::make_unique<cad::adapters::json::JsonCadModelReaderAdapter>();
+  } else if (dataSourceType == "opencascade") {
+    source = std::make_unique<cad::adapters::file::FileModelDataSourceAdapter>(); // Use file data source for direct file access
+    reader = std::make_unique<cad::adapters::opencascade::OpenCascadeCadModelReaderAdapter>();
   } else {
     source = std::make_unique<cad::adapters::fake::FakeModelDataSourceAdapter>();
     reader = std::make_unique<cad::adapters::fake::FakeCadModelReaderAdapter>();

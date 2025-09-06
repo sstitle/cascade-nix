@@ -45,12 +45,12 @@ CDPATH= ctest --test-dir build --output-on-failure
 set -e
 
 echo "🚀 Building project..."
-cmake --preset default
-cmake --build --preset default
+cmake --preset default > /dev/null
+cmake --build --preset default > /dev/null
 
 echo ""
 echo "🧪 Running all tests..."
-CDPATH= ctest --test-dir build --output-on-failure
+CDPATH= ctest --test-dir build --output-on-failure --quiet
 
 echo ""
 echo "📋 Demonstrating all CLI combinations:"
@@ -80,15 +80,17 @@ echo "6️⃣  Error handling (missing file):"
 ./build/cpp/cad/cad_cli --data-source=json list test-data/missing.json || echo "✅ Error handling works correctly"
 echo ""
 
+echo "7️⃣  OpenCASCADE STEP file (with spdlog):"
+./build/cpp/cad/cad_cli --logger=spdlog --data-source=opencascade list test-data/LEGOMAN.step
+echo ""
+
 echo "🎉 All examples completed successfully!"
 echo ""
 echo "📖 Available CLI options:"
-echo "  --logger=fake|spdlog      Choose logging implementation"
-echo "  --data-source=fake|json   Choose data source implementation"
+echo "  --logger=fake|spdlog           Choose logging implementation"
+echo "  --data-source=fake|json|opencascade   Choose data source implementation"
 echo ""
-echo "📁 New adapter structure:"
-echo "  cpp/cad/adapters/"
-echo "  ├── logger/               (fake outputs to console, spdlog with timestamps)"
-echo "  ├── model-data-source/    (fake in-memory, json file-based)"
-echo "  └── cad-model-reader/     (fake text format, json flat structure)"
+echo "📁 Supported file formats:"
+echo "  • JSON: Flat structure with assemblies and parts"
+echo "  • STEP: Industry-standard CAD format via OpenCASCADE-OCCT"
 ```

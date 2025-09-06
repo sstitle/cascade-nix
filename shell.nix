@@ -25,6 +25,7 @@ pkgs.mkShell {
     catch2Pkg
     spdlog
     nlohmann_json
+    opencascade-occt
     git
     nickel
     mask
@@ -39,9 +40,9 @@ pkgs.mkShell {
   # Add non-essential tools here; keep the core C++ deps above cleanly separated.
   shellHook = ''
     echo "🚀 C++ dev shell loaded (shell.nix)"
-    echo "Tools: cmake, ninja, clang/lld/libc++, catch2 (${catch2Pkg.pname or "catch2"} ${catch2Pkg.version or ""}), spdlog, nlohmann_json"
+    echo "Tools: cmake, ninja, clang/lld/libc++, catch2 (${catch2Pkg.pname or "catch2"} ${catch2Pkg.version or ""}), spdlog, nlohmann_json, opencascade-occt"
     export CMAKE_GENERATOR=Ninja
     # Ensure CMake can find packages from Nix buildInputs
-    export CMAKE_PREFIX_PATH="${catch2Pkg}:${pkgs.spdlog}:${pkgs.nlohmann_json}:$CMAKE_PREFIX_PATH"
+    export CMAKE_PREFIX_PATH="${catch2Pkg}:${pkgs.spdlog}:${pkgs.nlohmann_json}:${pkgs.opencascade-occt}:$CMAKE_PREFIX_PATH"
   '';
 }

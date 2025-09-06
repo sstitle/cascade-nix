@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Identifiers.hpp"
-#include "Part.hpp"
+#include "cpp/cad/core/domain/Identifiers.hpp"
+#include "cpp/cad/core/domain/Part.hpp"
 #include <string>
 #include <vector>
 

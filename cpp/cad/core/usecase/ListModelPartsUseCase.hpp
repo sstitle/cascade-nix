@@ -3,10 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "../domain/Model.hpp"
-#include "../ports/CadModelReaderPort.hpp"
-#include "../ports/LoggerPort.hpp"
-#include "../ports/ModelDataSourcePort.hpp"
+#include "cpp/cad/core/ports/CadModelReaderPort.hpp"
+#include "cpp/cad/core/ports/LoggerPort.hpp"
+#include "cpp/cad/core/ports/ModelDataSourcePort.hpp"
 
 namespace cad::usecase {
 

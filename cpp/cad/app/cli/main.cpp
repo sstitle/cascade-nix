@@ -1,13 +1,11 @@
 #include <iostream>
-#include <memory>
 #include <string>
-#include <vector>
 
-#include "../../adapters/fake/FakeCadModelReaderAdapter.hpp"
-#include "../../adapters/fake/FakeLoggerAdapter.hpp"
-#include "../../adapters/fake/FakeModelDataSourceAdapter.hpp"
-#include "../../core/usecase/ListModelPartsUseCase.hpp"
-#include "Formatter.hpp"
+#include "cpp/cad/adapters/fake/FakeCadModelReaderAdapter.hpp"
+#include "cpp/cad/adapters/fake/FakeLoggerAdapter.hpp"
+#include "cpp/cad/adapters/fake/FakeModelDataSourceAdapter.hpp"
+#include "cpp/cad/core/usecase/ListModelPartsUseCase.hpp"
+#include "cpp/cad/app/cli/Formatter.hpp"
 
 int main(int argc, char **argv) {
   if (argc < 3) {

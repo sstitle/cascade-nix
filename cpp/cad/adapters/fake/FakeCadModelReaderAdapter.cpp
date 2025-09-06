@@ -1,6 +1,5 @@
-#include "FakeCadModelReaderAdapter.hpp"
+#include "cpp/cad/adapters/fake/FakeCadModelReaderAdapter.hpp"
 
-#include <sstream>
 #include <stack>
 #include <string>
 

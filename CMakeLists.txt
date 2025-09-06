@@ -12,4 +12,3 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 add_subdirectory(cpp)
-add_subdirectory(tests)

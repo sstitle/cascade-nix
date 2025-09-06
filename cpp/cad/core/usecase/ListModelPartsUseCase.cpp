@@ -1,4 +1,4 @@
-#include "ListModelPartsUseCase.hpp"
+#include "cpp/cad/core/usecase/ListModelPartsUseCase.hpp"
 
 #include <algorithm>
 #include <sstream>

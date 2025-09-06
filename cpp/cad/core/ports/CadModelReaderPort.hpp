@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../domain/Model.hpp"
+#include "cpp/cad/core/domain/Model.hpp"
 #include <istream>
 
 namespace cad::ports {

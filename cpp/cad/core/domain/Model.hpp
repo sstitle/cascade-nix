@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Assembly.hpp"
+#include "cpp/cad/core/domain/Assembly.hpp"
 
 namespace cad::domain {
 

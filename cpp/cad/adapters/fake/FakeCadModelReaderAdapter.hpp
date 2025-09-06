@@ -1,9 +1,8 @@
 #pragma once
 
 #include <istream>
-#include <string>
 
-#include "../../core/ports/CadModelReaderPort.hpp"
+#include "cpp/cad/core/ports/CadModelReaderPort.hpp"
 
 namespace cad::adapters::fake {
 

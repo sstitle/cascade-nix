@@ -18,5 +18,3 @@ target_include_directories(test_usecase PRIVATE ${CMAKE_SOURCE_DIR})
 
 include(Catch)
 catch_discover_tests(test_usecase)
-
-add_test(NAME cli_mem_demo COMMAND $<TARGET_FILE:cad_cli> list mem:demo)

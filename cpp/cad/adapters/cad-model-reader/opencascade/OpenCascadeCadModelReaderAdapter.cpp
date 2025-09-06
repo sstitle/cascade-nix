@@ -4,19 +4,31 @@
 #include <memory>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
+#include <iterator>
 
-// OpenCASCADE headers
-#include <STEPCAFControl_Reader.hxx>
+// OpenCASCADE headers - ordered for proper Handle<T> template resolution
+#include <Standard_Handle.hxx>
+#include <Standard_Integer.hxx>
+#include <Standard_CString.hxx>
+#include <TCollection_ExtendedString.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <IFSelect_ReturnStatus.hxx>
+
+// Document and application framework
 #include <TDocStd_Document.hxx>
 #include <XCAFApp_Application.hxx>
+
+// STEP reading
+#include <STEPCAFControl_Reader.hxx>
+
+// XDE framework for shape and name handling
 #include <XCAFDoc_DocumentTool.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
 #include <TDF_LabelSequence.hxx>
+#include <TDF_Label.hxx>
 #include <TDataStd_Name.hxx>
 #include <TopoDS_Shape.hxx>
-#include <TCollection_AsciiString.hxx>
-#include <IFSelect_ReturnStatus.hxx>
-#include <Standard_Integer.hxx>
 
 using cad::domain::Assembly;
 using cad::domain::Model;
@@ -24,6 +36,68 @@ using cad::domain::Part;
 
 namespace cad::adapters::opencascade {
 
+// Helper function to extract name from a label
+std::string extractNameFromLabel(const TDF_Label& label, const std::string& fallbackName) {
+  ::opencascade::handle<TDataStd_Name> nameAttr;
+  if (label.FindAttribute(TDataStd_Name::GetID(), nameAttr)) {
+    TCollection_ExtendedString extName = nameAttr->Get();
+    // Convert to ASCII string (this handles UTF-8 conversion)
+    TCollection_AsciiString asciiName(extName);
+    return std::string(asciiName.ToCString());
+  }
+  return fallbackName;
+}
+
+// Helper function to process a shape label recursively
+void processShapeLabel(const ::opencascade::handle<XCAFDoc_ShapeTool>& shapeTool, 
+                      const TDF_Label& label, 
+                      Assembly& parentAssembly,
+                      int& partCounter) {
+  
+  std::string baseName = "Entity_" + std::to_string(partCounter++);
+  std::string shapeName = extractNameFromLabel(label, baseName);
+  
+  if (shapeTool->IsAssembly(label)) {
+    // Create a new assembly
+    Assembly assembly;
+    assembly.name = shapeName;
+    
+    // Get components of this assembly
+    TDF_LabelSequence components;
+    shapeTool->GetComponents(label, components);
+    
+    // Process each component recursively
+    for (Standard_Integer i = 1; i <= components.Length(); i++) {
+      processShapeLabel(shapeTool, components.Value(i), assembly, partCounter);
+    }
+    
+    parentAssembly.children.push_back(assembly);
+    
+  } else if (shapeTool->IsComponent(label)) {
+    // This is a component reference - get the actual shape it refers to
+    TDF_Label refLabel;
+    if (shapeTool->GetReferredShape(label, refLabel)) {
+      processShapeLabel(shapeTool, refLabel, parentAssembly, partCounter);
+    } else {
+      // Fallback: treat as a part
+      Part part;
+      part.name = shapeName + " (Component)";
+      parentAssembly.parts.push_back(part);
+    }
+    
+  } else if (shapeTool->IsSimpleShape(label)) {
+    // This is a simple shape (part)
+    Part part;
+    part.name = shapeName;
+    parentAssembly.parts.push_back(part);
+    
+  } else {
+    // Unknown shape type - treat as part
+    Part part;
+    part.name = shapeName + " (Unknown)";
+    parentAssembly.parts.push_back(part);
+  }
+}
 
 cad::domain::Model OpenCascadeCadModelReaderAdapter::readModelFromStream(std::istream &stream) {
   Model model;
@@ -52,70 +126,97 @@ cad::domain::Model OpenCascadeCadModelReaderAdapter::readModelFromStream(std::is
       tempStream << content;
     }
     
-    // Create STEP reader (simplified approach)
-    STEPCAFControl_Reader reader;
-    
-    // Read the STEP file
-    IFSelect_ReturnStatus status = reader.ReadFile(tempFile.string().c_str());
-    
-    // Clean up temporary file
-    std::filesystem::remove(tempFile);
-    
-    if (status == IFSelect_RetDone) {
-      // Try to get basic information about the STEP file
-      try {
-        // Get the number of entities from the reader
-        Standard_Integer nbRoots = reader.NbRootsForTransfer();
-        
-        // Try to get more detailed information
-        Standard_Integer nbEntities = nbRoots; // Fallback to roots count
-        
-        model.root.name = "STEP Model (" + std::to_string(nbRoots) + " root shapes, " + std::to_string(nbEntities) + " total entities)";
-        
-        // Create parts for each root shape
-        for (Standard_Integer i = 1; i <= nbRoots; i++) {
-          Part part;
-          part.name = "Shape_" + std::to_string(i);
-          model.root.parts.push_back(part);
-        }
-        
-        // If we have more entities than roots, create an assembly to show the structure
-        if (nbEntities > nbRoots && nbRoots > 0) {
-          Assembly assembly;
-          assembly.name = "Additional_Entities";
-          
-          // Add remaining entities as parts in the assembly
-          for (Standard_Integer i = nbRoots + 1; i <= std::min(nbRoots + 10, nbEntities); i++) {
-            Part part;
-            part.name = "Entity_" + std::to_string(i);
-            assembly.parts.push_back(part);
-          }
-          
-          if (nbEntities > nbRoots + 10) {
-            Part part;
-            part.name = "... and " + std::to_string(nbEntities - nbRoots - 10) + " more entities";
-            assembly.parts.push_back(part);
-          }
-          
-          model.root.children.push_back(assembly);
-        }
-        
-      } catch (const std::exception& e) {
-        model.root.name = "STEP Model (Basic parsing successful)";
-        Part part;
-        part.name = "STEP_Content";
-        model.root.parts.push_back(part);
+    try {
+      // Initialize XDE Application and Document
+      ::opencascade::handle<XCAFApp_Application> app = XCAFApp_Application::GetApplication();
+      ::opencascade::handle<TDocStd_Document> doc;
+      app->NewDocument("MDTV-XCAF", doc);
+      
+      // Create STEP reader with XDE support
+      STEPCAFControl_Reader reader;
+      reader.SetNameMode(true);  // Enable name reading
+      
+      // Read the STEP file
+      IFSelect_ReturnStatus status = reader.ReadFile(tempFile.string().c_str());
+      
+      // Clean up temporary file
+      std::filesystem::remove(tempFile);
+      
+      if (status != IFSelect_RetDone) {
+        model.root.name = "Error reading STEP file";
+        return model;
       }
       
-    } else {
-      model.root.name = "Error reading STEP file";
+      // Transfer data to the document
+      if (!reader.Transfer(doc)) {
+        model.root.name = "Error transferring STEP data";
+        return model;
+      }
+      
+      // Get the shape tool for accessing hierarchy
+      ::opencascade::handle<XCAFDoc_ShapeTool> shapeTool = XCAFDoc_DocumentTool::ShapeTool(doc->Main());
+      if (shapeTool.IsNull()) {
+        model.root.name = "Error accessing shape tool";
+        return model;
+      }
+      
+      // Get free shapes (top-level shapes)
+      TDF_LabelSequence freeShapes;
+      shapeTool->GetFreeShapes(freeShapes);
+      
+      if (freeShapes.Length() == 0) {
+        model.root.name = "No shapes found in STEP file";
+        return model;
+      }
+      
+      // Count total parts and assemblies for the root name
+      int totalParts = 0;
+      int totalAssemblies = 0;
+      
+      // First pass: count entities
+      TDF_LabelSequence allShapes;
+      shapeTool->GetShapes(allShapes);
+      for (Standard_Integer i = 1; i <= allShapes.Length(); i++) {
+        TDF_Label label = allShapes.Value(i);
+        if (shapeTool->IsAssembly(label)) {
+          totalAssemblies++;
+        } else if (shapeTool->IsSimpleShape(label) || shapeTool->IsComponent(label)) {
+          totalParts++;
+        }
+      }
+      
+      // Set meaningful root name
+      std::string rootName = "STEP Model";
+      if (totalAssemblies > 0 || totalParts > 0) {
+        rootName += " (" + std::to_string(totalAssemblies) + " assemblies, " + 
+                    std::to_string(totalParts) + " parts)";
+      }
+      model.root.name = rootName;
+      
+      // Process each free shape
+      int partCounter = 1;
+      for (Standard_Integer i = 1; i <= freeShapes.Length(); i++) {
+        TDF_Label label = freeShapes.Value(i);
+        processShapeLabel(shapeTool, label, model.root, partCounter);
+      }
+      
+      return model;
+      
+    } catch (const std::exception& e) {
+      // Clean up temporary file in case of exception
+      std::filesystem::remove(tempFile);
+      
+      // Fallback to simplified parsing
+      model.root.name = "STEP Model (XDE parsing failed, using fallback)";
+      Part part;
+      part.name = "STEP_Content (" + std::string(e.what()) + ")";
+      model.root.parts.push_back(part);
+      return model;
     }
-    
-    return model;
     
   } catch (const std::exception& e) {
     // Return model with error message
-    model.root.name = "Exception reading STEP file";
+    model.root.name = "Exception reading STEP file: " + std::string(e.what());
     return model;
   }
 }

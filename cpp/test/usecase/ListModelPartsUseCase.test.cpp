@@ -1,8 +1,8 @@
 #include <catch2/catch_all.hpp>
 
-#include "cpp/cad/adapters/fake/FakeCadModelReaderAdapter.hpp"
-#include "cpp/cad/adapters/fake/FakeLoggerAdapter.hpp"
-#include "cpp/cad/adapters/fake/FakeModelDataSourceAdapter.hpp"
+#include "cpp/cad/adapters/cad-model-reader/fake/FakeCadModelReaderAdapter.hpp"
+#include "cpp/cad/adapters/logger/fake/FakeLoggerAdapter.hpp"
+#include "cpp/cad/adapters/model-data-source/fake/FakeModelDataSourceAdapter.hpp"
 #include "cpp/cad/core/usecase/ListModelPartsUseCase.hpp"
 
 TEST_CASE("ListModelPartsUseCase lists nested assemblies and parts "

@@ -1,4 +1,4 @@
-#include "cpp/cad/adapters/fake/FakeCadModelReaderAdapter.hpp"
+#include "cpp/cad/adapters/cad-model-reader/fake/FakeCadModelReaderAdapter.hpp"
 
 #include <stack>
 #include <string>

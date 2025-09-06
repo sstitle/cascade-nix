@@ -1,6 +1,7 @@
-#include "cpp/cad/adapters/spdlog/SpdlogAdapter.hpp"
+#include "cpp/cad/adapters/logger/spdlog/SpdlogAdapter.hpp"
 
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/common.h>
 
 namespace cad::adapters::spdlog {
 
@@ -9,7 +10,8 @@ SpdlogAdapter::SpdlogAdapter(std::shared_ptr<::spdlog::logger> logger)
   if (!logger_) {
     // Create a default console logger if none provided
     logger_ = ::spdlog::stdout_color_mt("cad_logger");
-    logger_->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+    logger_->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+    // Colors are automatically enabled with stdout_color_mt
   }
 }
 

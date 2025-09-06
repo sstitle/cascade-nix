@@ -1,0 +1,76 @@
+{
+  "assemblies": [
+    {
+      "id": "root",
+      "name": "Aircraft",
+      "parent_id": null
+    },
+    {
+      "id": "fuselage",
+      "name": "Fuselage",
+      "parent_id": "root"
+    },
+    {
+      "id": "wings",
+      "name": "Wings",
+      "parent_id": "root"
+    },
+    {
+      "id": "left_wing",
+      "name": "Left Wing",
+      "parent_id": "wings"
+    },
+    {
+      "id": "right_wing",
+      "name": "Right Wing",
+      "parent_id": "wings"
+    },
+    {
+      "id": "engines",
+      "name": "Engines",
+      "parent_id": "root"
+    }
+  ],
+  "parts": [
+    {
+      "id": "cockpit",
+      "name": "Cockpit",
+      "assembly_id": "fuselage"
+    },
+    {
+      "id": "passenger_cabin",
+      "name": "Passenger Cabin",
+      "assembly_id": "fuselage"
+    },
+    {
+      "id": "left_aileron",
+      "name": "Aileron",
+      "assembly_id": "left_wing"
+    },
+    {
+      "id": "left_flap",
+      "name": "Flap",
+      "assembly_id": "left_wing"
+    },
+    {
+      "id": "right_aileron",
+      "name": "Aileron",
+      "assembly_id": "right_wing"
+    },
+    {
+      "id": "right_flap",
+      "name": "Flap",
+      "assembly_id": "right_wing"
+    },
+    {
+      "id": "engine1",
+      "name": "Port Engine",
+      "assembly_id": "engines"
+    },
+    {
+      "id": "engine2",
+      "name": "Starboard Engine",
+      "assembly_id": "engines"
+    }
+  ]
+}

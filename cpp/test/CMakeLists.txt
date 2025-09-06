@@ -16,7 +16,7 @@ else()
 endif()
 target_include_directories(test_usecase PRIVATE ${CMAKE_SOURCE_DIR})
 
-add_executable(test_spdlog_adapter adapters/SpdlogAdapter.test.cpp)
+add_executable(test_spdlog_adapter logger/SpdlogAdapter.test.cpp)
 if(Catch2_VERSION VERSION_LESS 3)
   target_link_libraries(test_spdlog_adapter PRIVATE adapter_spdlog
                                                     Catch2::Catch2)
@@ -26,6 +26,28 @@ else()
 endif()
 target_include_directories(test_spdlog_adapter PRIVATE ${CMAKE_SOURCE_DIR})
 
+add_executable(test_json_model_data_source model-data-source/JsonModelDataSourceAdapter.test.cpp)
+if(Catch2_VERSION VERSION_LESS 3)
+  target_link_libraries(test_json_model_data_source PRIVATE adapter_json
+                                                            Catch2::Catch2)
+else()
+  target_link_libraries(test_json_model_data_source PRIVATE adapter_json
+                                                            Catch2::Catch2WithMain)
+endif()
+target_include_directories(test_json_model_data_source PRIVATE ${CMAKE_SOURCE_DIR})
+
+add_executable(test_json_cad_model_reader cad-model-reader/JsonCadModelReaderAdapter.test.cpp)
+if(Catch2_VERSION VERSION_LESS 3)
+  target_link_libraries(test_json_cad_model_reader PRIVATE adapter_json
+                                                           Catch2::Catch2)
+else()
+  target_link_libraries(test_json_cad_model_reader PRIVATE adapter_json
+                                                           Catch2::Catch2WithMain)
+endif()
+target_include_directories(test_json_cad_model_reader PRIVATE ${CMAKE_SOURCE_DIR})
+
 include(Catch)
 catch_discover_tests(test_usecase)
 catch_discover_tests(test_spdlog_adapter)
+catch_discover_tests(test_json_model_data_source)
+catch_discover_tests(test_json_cad_model_reader)

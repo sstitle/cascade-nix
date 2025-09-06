@@ -1,0 +1,21 @@
+{
+  "assemblies": [
+    {
+      "id": "root",
+      "name": "Simple Device",
+      "parent_id": null
+    }
+  ],
+  "parts": [
+    {
+      "id": "button",
+      "name": "Power Button",
+      "assembly_id": "root"
+    },
+    {
+      "id": "led",
+      "name": "Status LED",
+      "assembly_id": "root"
+    }
+  ]
+}

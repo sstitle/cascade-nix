@@ -2,7 +2,7 @@
 #include <spdlog/sinks/ostream_sink.h>
 #include <sstream>
 
-#include "cpp/cad/adapters/spdlog/SpdlogAdapter.hpp"
+#include "cpp/cad/adapters/logger/spdlog/SpdlogAdapter.hpp"
 
 TEST_CASE("SpdlogAdapter logs messages with correct levels") {
   // Create an ostringstream sink to capture log output

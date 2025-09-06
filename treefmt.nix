@@ -29,8 +29,8 @@
         ]
       );
     };
-
   };
+  
   settings.formatter = {
     cmake-format.includes = lib.mkAfter [
       "*.cmake"

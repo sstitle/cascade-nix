@@ -1,8 +1,11 @@
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 let
   catch2Pkg = if pkgs ? catch2_3 then pkgs.catch2_3 else pkgs.catch2;
-in pkgs.mkShell {
+in
+pkgs.mkShell {
   # -----------------------------
   # Build tools
   # -----------------------------
@@ -40,5 +43,3 @@ in pkgs.mkShell {
     export CMAKE_PREFIX_PATH="${catch2Pkg}:$CMAKE_PREFIX_PATH"
   '';
 }
-
-

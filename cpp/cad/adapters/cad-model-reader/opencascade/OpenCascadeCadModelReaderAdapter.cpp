@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <iterator>
+#include <string>
 
 // OpenCASCADE headers - ordered for proper Handle<T> template resolution
 #include <Standard_Handle.hxx>
@@ -116,6 +117,28 @@ cad::domain::Model OpenCascadeCadModelReaderAdapter::readModelFromStream(std::is
     // Create a temporary file since OpenCASCADE readers work with files
     std::filesystem::path tempFile = std::filesystem::temp_directory_path() / "temp_step_file.step";
     
+    // Try to extract model name from the content itself before writing to temp file
+    std::string originalModelName = "STEP Model";
+    try {
+      // Look for FILE_NAME in the content
+      size_t fileNamePos = content.find("FILE_NAME(");
+      if (fileNamePos != std::string::npos) {
+        size_t nameStart = content.find("/* name */ '", fileNamePos);
+        if (nameStart != std::string::npos) {
+          nameStart += 12; // Length of "/* name */ '"
+          size_t nameEnd = content.find("'", nameStart);
+          if (nameEnd != std::string::npos) {
+            std::string modelName = content.substr(nameStart, nameEnd - nameStart);
+            if (!modelName.empty() && modelName != "Unknown") {
+              originalModelName = modelName;
+            }
+          }
+        }
+      }
+    } catch (...) {
+      // If extraction fails, keep default name
+    }
+    
     // Write content to temporary file
     {
       std::ofstream tempStream(tempFile);
@@ -185,8 +208,8 @@ cad::domain::Model OpenCascadeCadModelReaderAdapter::readModelFromStream(std::is
         }
       }
       
-      // Set meaningful root name
-      std::string rootName = "STEP Model";
+      // Use the model name extracted from the original content
+      std::string rootName = originalModelName;
       if (totalAssemblies > 0 || totalParts > 0) {
         rootName += " (" + std::to_string(totalAssemblies) + " assemblies, " + 
                     std::to_string(totalParts) + " parts)";

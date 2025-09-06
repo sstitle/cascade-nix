@@ -1,0 +1,18 @@
+# ninja log v6
+1549	1679	1757179059223564610	cpp/cad/libcad_usecases.a	2480fb98fed25ce5
+1318	1653	1757179058992604284	cpp/cad/libadapter_fake.a	385d74682d0160ea
+2	1549	1757179057676669840	cpp/cad/CMakeFiles/cad_usecases.dir/core/usecase/ListModelPartsUseCase.cpp.o	df7a16186746a6bb
+3	1318	1757179057677288686	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeCadModelReaderAdapter.cpp.o	7e6916e1992931e8
+3	865	1757179057677718153	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeModelDataSourceAdapter.cpp.o	c8de7ce0c38c48c7
+4	726	1757179057678147745	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeLoggerAdapter.cpp.o	e3bd0fd22ca2b7da
+4	1124	1757179057678575421	cpp/cad/CMakeFiles/cad_cli.dir/app/cli/main.cpp.o	924faf38bb14cf5c
+5	713	1757179057678996596	cpp/cad/CMakeFiles/cad_cli.dir/app/cli/Formatter.cpp.o	afb48578d72aaae2
+9	794	1757179107035369117	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeLoggerAdapter.cpp.o	b3f8473be4fc26e1
+10	804	1757179107036235677	cpp/cad/CMakeFiles/cad_cli.dir/app/cli/Formatter.cpp.o	348317bc81f2b63c
+9	933	1757179107034929191	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeModelDataSourceAdapter.cpp.o	31312f56becd88a2
+9	1177	1757179107035810376	cpp/cad/CMakeFiles/cad_cli.dir/app/cli/main.cpp.o	b5070a7e399c2e75
+8	1378	1757179107034478266	cpp/cad/CMakeFiles/adapter_fake.dir/adapters/fake/FakeCadModelReaderAdapter.cpp.o	73aff82c4c901bb6
+1378	1511	1757179108404226980	cpp/cad/libadapter_fake.a	385d74682d0160ea
+7	1599	1757179107033828461	cpp/cad/CMakeFiles/cad_usecases.dir/core/usecase/ListModelPartsUseCase.cpp.o	48a123a92b5accb3
+1599	1734	1757179108625879950	cpp/cad/libcad_usecases.a	2480fb98fed25ce5
+1734	1907	1757179108760013538	cpp/cad/cad_cli	404ab52b18e5103f

@@ -26,3 +26,13 @@ cmake --build --preset default
 ```bash
 ./build/cpp/cad/cad_cli list mem:demo
 ```
+
+## test
+
+> Build and run tests (CTest + Catch2)
+
+```bash
+cmake --preset default
+cmake --build --preset default
+CDPATH= ctest --test-dir build --output-on-failure
+```

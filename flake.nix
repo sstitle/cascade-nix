@@ -21,32 +21,8 @@
         treefmtEval = treefmt-nix.lib.evalModule pkgs ./nix/treefmt.nix;
       in
       {
-        # Development shell with C++ toolchain, cmake, and mask
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            # Core tools
-            git
-            nickel
-            mask
-            cmake
-            ninja
-            gcc
-          ];
-
-          shellHook = ''
-            echo "🚀 Development environment loaded!"
-            echo "Available tools:"
-            echo "  - cmake: Build system"
-            echo "  - ninja: Build tool"
-            echo "  - gcc/clang: C++ toolchain"
-            echo "  - nickel: Configuration language"
-            echo "  - mask: Task runner"
-            echo ""
-            echo "Run 'mask --help' to see available tasks."
-            echo "Run 'nix fmt' to format all files."
-            export CMAKE_GENERATOR=Ninja
-          '';
-        };
+        # Development shell imports C++ deps from shell.nix to keep them centralized
+        devShells.default = import ./shell.nix { inherit pkgs; };
 
         # for `nix fmt`
         formatter = treefmtEval.config.build.wrapper;

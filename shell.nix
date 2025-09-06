@@ -17,9 +17,8 @@ in pkgs.mkShell {
   # C++ toolchain and libraries
   # -----------------------------
   buildInputs = with pkgs; [
-    llvmPackages.clang
-    llvmPackages.lld
-    llvmPackages.libcxx
+    clang
+    clang-tools
     catch2Pkg
     git
     nickel

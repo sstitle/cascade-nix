@@ -2,3 +2,4 @@ result*
 .direnv/
 scratchpad.md
 build/
+compile_commands.json
